@@ -1,0 +1,17 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{E42E4A27-4A0B-B99B-E2F0-C0AE1572B949}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "Project5",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"UMGEditor",
+				"UMG"
+			]
+		}
+	]
+}
