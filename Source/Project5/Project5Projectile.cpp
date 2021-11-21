@@ -46,8 +46,6 @@ void AProject5Projectile::BeginPlay()
 	if (GunType == "GL")
 	{
 		IsGrenade = true;
-		//CollisionComp->SetSphereRadius(5.292534f);
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,TEXT("GL"));
 		float Mass = CollisionComp->GetMass();
 		FVector FireDirection = InitRotation.Vector();
 		float InitSpeed = 1000.f;
@@ -58,7 +56,6 @@ void AProject5Projectile::BeginPlay()
 	{
 		IsGrenade = false;
 		this->SetActorScale3D(FVector(0.5f, 0.5f, 0.5f));
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,TEXT("AR"));
 		float Mass = CollisionComp->GetMass();
 		FVector FireDirection = InitRotation.Vector();
 		float InitSpeed = 3000.f;
@@ -67,9 +64,7 @@ void AProject5Projectile::BeginPlay()
 	if (GunType == "SG")
 	{
 		IsGrenade = false;
-		//CollisionComp->SetSphereRadius(2.5f);
 		this->SetActorScale3D(FVector(0.5f, 0.5f, 0.5f));
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,TEXT("AR"));
 		float Mass = CollisionComp->GetMass();
 		FVector FireDirection = InitRotation.Vector();
 		float InitSpeed = 3000.f;
@@ -85,12 +80,9 @@ void AProject5Projectile::CheckExplosion()
 		TArray<AActor*> OutHits;
 		ExplosionRange->SetSphereRadius(2000.f);
 		ExplosionRange->GetOverlappingActors(OutHits, TSubclassOf<AActor>());
-		DrawDebugSphere(GetWorld(), GetActorLocation(), ExplosionRange->GetScaledSphereRadius(), 50, FColor::Cyan,
-		                true);
 		// loop through TArray
 		for (auto& Hit : OutHits)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, (TEXT("Grenade %s"), Hit->GetName()));
 			UStaticMeshComponent* MeshComp = Cast<UStaticMeshComponent>((Hit)->GetRootComponent());
 
 			if (MeshComp && Hit->IsRootComponentMovable())
@@ -115,8 +107,6 @@ void AProject5Projectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor
 		{
 			if (OtherComp->IsSimulatingPhysics())
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red,
-				                                 (TEXT("Onhit%s %S"), OtherComp->GetName(), OtherActor->GetName()));
 				OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
 				Destroy();
 			}
@@ -125,16 +115,12 @@ void AProject5Projectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor
 		{
 			if (OtherActor->ActorHasTag("Enemy"))
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, (TEXT("Hit Enemy%s"), OtherActor->GetName()));
 				GrenadeTrigger = true;
 				CheckExplosion();
 				Destroy();
 			}
 			else
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,
-				                                 FString::Printf(
-					                                 TEXT("Velocity is %s"), *this->GetVelocity().ToString()));
 				if (IsGrenade && this->GetVelocity().Size() < 200.0f)
 				{
 					GrenadeTrigger = true;
